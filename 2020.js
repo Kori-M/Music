@@ -1,4 +1,4 @@
-const songs = [
+var songs = [
     {
         title: "Blinding Lights",
         artist: "The Weeknd",
