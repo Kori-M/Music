@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ear Candy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --card: #16161f;
+      --border: #2a2a3a;
+      --accent: #ff2d55;
+      --accent2: #ff6b35;
+      --text: #f0f0f8;
+      --muted: #6b6b85;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 20%, rgba(255,45,85,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(255,107,53,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(255,214,10,0.03) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .page {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 480px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── HEADER ── */
+    header { text-align: center; margin-bottom: 56px; }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 16vw, 100px);
+      letter-spacing: 0.04em;
+      line-height: 0.9;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .tagline {
+      font-size: 13px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    /* ── GAME LIST ── */
+    .game-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ── GAME BUTTON ── */
+    .game-btn {
+      width: 100%;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .game-btn:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,45,85,0.2); }
+    .game-btn:hover::before { opacity: 0.06; }
+
+    .game-btn > * { position: relative; z-index: 1; }
+
+    .btn-left { display: flex; flex-direction: column; gap: 3px; }
+    .btn-name { font-weight: 600; font-size: 16px; }
+    .btn-sub  { font-size: 12px; color: var(--muted); }
+
+    .btn-arrow {
+      font-size: 18px;
+      color: var(--accent);
+      transition: transform 0.2s;
+    }
+    .game-btn:hover .btn-arrow { transform: translateX(4px); }
+
+    /* ── LOCKED BUTTON ── */
+    .game-btn.locked {
+      opacity: 0.38;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .game-btn.locked::before { display: none; }
+
+    .lock-icon { font-size: 15px; color: var(--muted); }
+
+    /* ── SECTION DIVIDER ── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 6px 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 48px;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <header>
+    <div class="logo">Ear Candy</div>
+    <div class="tagline">Music games</div>
+  </header>
+
+  <div class="game-list">
+
+    <!-- LIVE -->
+    <a href="name-that-tune.html" class="game-btn">
+      <div class="btn-left">
+        <div class="btn-name">Name That Tune</div>
+        <div class="btn-sub">Identify the song from a short clip</div>
+      </div>
+      <span class="btn-arrow">→</span>
+    </a>
+
+    <div class="divider"></div>
+
+    <!-- LOCKED -->
+    <div class="game-btn locked">
+      <div class="btn-left">
+        <div class="btn-name">Coming Soon</div>
+        <div class="btn-sub">Stay tuned</div>
+      </div>
+      <span class="lock-icon">🔒</span>
+    </div>
+
+    <div class="game-btn locked">
+      <div class="btn-left">
+        <div class="btn-name">Coming Soon</div>
+        <div class="btn-sub">Stay tuned</div>
+      </div>
+      <span class="lock-icon">🔒</span>
+    </div>
+
+    <div class="game-btn locked">
+      <div class="btn-left">
+        <div class="btn-name">Coming Soon</div>
+        <div class="btn-sub">Stay tuned</div>
+      </div>
+      <span class="lock-icon">🔒</span>
+    </div>
+
+  </div>
+
+  <footer>More games dropping soon</footer>
+</div>
+
+</body>
+</html>
