@@ -16,6 +16,17 @@ const ecSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* ── AUTH FUNCTIONS ─────────────────────────────────────────── */
 
+// Check if a username is already taken (case-insensitive)
+async function ecUsernameTaken(username) {
+  const { data, error } = await ecSupabase
+    .from('profiles')
+    .select('username')
+    .ilike('username', username) // case-insensitive match
+    .limit(1);
+  if (error) return { ok: false, error: error.message };
+  return { ok: true, taken: data && data.length > 0 };
+}
+
 // Sign up with email, password, and chosen username
 async function ecSignUp(email, password, username) {
   // 1. Create the auth account
