@@ -41,6 +41,14 @@
     }
     .field input:focus { outline:none; border-color:var(--accent); }
     .field input::placeholder { color:#44445a; }
+    .pw-wrap { position:relative; }
+    .pw-wrap input { padding-right:46px; }
+    .pw-toggle {
+      position:absolute; right:6px; top:50%; transform:translateY(-50%);
+      background:transparent; border:none; cursor:pointer; font-size:16px;
+      padding:8px 10px; opacity:0.5; transition:opacity 0.2s; line-height:1;
+    }
+    .pw-toggle:hover { opacity:1; }
     .btn-primary {
       width:100%; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff;
       border:none; border-radius:50px; padding:15px; font-family:'DM Sans',sans-serif;
@@ -89,7 +97,10 @@
       </div>
       <div class="field">
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="At least 6 characters" autocomplete="new-password" />
+        <div class="pw-wrap">
+          <input type="password" id="password" placeholder="At least 6 characters" autocomplete="new-password" />
+          <button type="button" class="pw-toggle" onclick="togglePw('password', this)" aria-label="Show password">👁</button>
+        </div>
       </div>
 
       <button class="btn-primary" id="signup-btn" onclick="doSignup()">Sign Up</button>
@@ -110,6 +121,18 @@
       const m = document.getElementById('msg');
       m.textContent = text;
       m.className = `msg show ${type}`;
+    }
+
+    // Show/hide password
+    function togglePw(id, btn) {
+      const input = document.getElementById(id);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        btn.textContent = '👁';
+      }
     }
 
     let lastEmail = '';
