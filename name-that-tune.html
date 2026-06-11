@@ -566,7 +566,7 @@ function startGame() {
   bestBonus = 0; totalSpeedMs = 0; speedAnswers = 0;
 
   // Find label for badge
-  const packDef = [...ARTISTS, ...DECADES].find(p => p.id === selectedPack);
+  const packDef = DECADES.find(p => p.id === selectedPack);
   document.getElementById('badge-pack').textContent = packDef ? packDef.label : selectedPack;
   document.getElementById('badge-diff').textContent = DIFF[selectedDiff].label;
   document.getElementById('badge-diff').className   = `badge diff-${selectedDiff}`;
