@@ -128,7 +128,7 @@
       font-size: 28px;
       line-height: 1;
       letter-spacing: 0.05em;
-      color: #ff2d55;
+      color: #ffffff;
     }
     .ec-logo-gap { height: 12px; }
 
