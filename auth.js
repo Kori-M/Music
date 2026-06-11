@@ -37,13 +37,17 @@ async function ecSignUp(email, password, username) {
   });
   if (error) return { ok: false, error: error.message };
 
-  // 2. Create their profile row (username for leaderboards)
-  //    Only works if a session exists; if email confirmation is on,
-  //    the profile is created on first login instead (see ecEnsureProfile).
-  if (data.user) {
-    await ecSupabase.from('profiles')
-      .insert({ id: data.user.id, username })
-      .then(() => {}, () => {}); // ignore if not yet allowed
+  // 2. Create their profile row (username for leaderboards).
+  //    If confirmation is OFF, a session exists now and this works.
+  //    If confirmation is ON, this runs on first login via ecEnsureProfile.
+  if (data.user && data.session) {
+    const { error: profErr } = await ecSupabase
+      .from('profiles')
+      .insert({ id: data.user.id, username });
+    if (profErr && !/duplicate|unique/i.test(profErr.message)) {
+      // a real problem (not just "already exists")
+      console.warn('Profile creation issue:', profErr.message);
+    }
   }
   return { ok: true, needsConfirmation: !data.session };
 }
