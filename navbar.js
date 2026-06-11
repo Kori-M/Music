@@ -125,13 +125,12 @@
     }
     .ec-logo-letter {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
+      font-size: 28px;
       line-height: 1;
       letter-spacing: 0.05em;
-      background: linear-gradient(135deg, #fff 0%, #ff2d55 60%, #ff6b35 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      color: #ff2d55;
     }
-    .ec-logo-gap { height: 10px; }
+    .ec-logo-gap { height: 12px; }
 
     /* ── BOTTOM: return ── */
     .ec-return {
@@ -144,7 +143,7 @@
 
     @media (max-width: 560px) {
       :root { --ec-nav-width: 72px; }
-      .ec-logo-letter { font-size: 17px; }
+      .ec-logo-letter { font-size: 22px; }
       .ec-btn { font-size: 9px; }
     }
   `;
