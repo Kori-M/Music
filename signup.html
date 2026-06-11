@@ -162,6 +162,23 @@
       if (password.length < 6) return showMsg('Password must be at least 6 characters.', 'error');
 
       btn.disabled = true;
+      btn.textContent = 'Checking username…';
+
+      // Make sure username isn't already taken
+      const check = await ecUsernameTaken(username);
+      if (!check.ok) {
+        showMsg('Could not verify username right now. Try again.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Sign Up';
+        return;
+      }
+      if (check.taken) {
+        showMsg('That username is already taken — please pick another.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Sign Up';
+        return;
+      }
+
       btn.textContent = 'Creating account…';
 
       const res = await ecSignUp(email, password, username);
