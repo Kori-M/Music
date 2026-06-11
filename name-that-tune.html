@@ -231,14 +231,16 @@
     /* ── POINTS POPUP ── */
     .pts-popup {
       position: fixed; font-family: 'Bebas Neue', sans-serif; font-size: 38px;
-      color: var(--gold); pointer-events: none; z-index: 200; opacity: 0;
+      color: var(--gold); pointer-events: none; z-index: 1200; opacity: 0;
       text-shadow: 0 2px 16px rgba(255,214,10,0.6);
+      transform: translate(-50%, -50%);
     }
-    .pts-popup.fire { animation: ptsFloat 1.1s ease forwards; }
+    .pts-popup.fire { animation: ptsFloat 1.0s cubic-bezier(0.16,1,0.3,1) forwards; }
     @keyframes ptsFloat {
-      0%   { opacity:1; transform:translateY(0) scale(1); }
-      60%  { opacity:1; transform:translateY(-55px) scale(1.15); }
-      100% { opacity:0; transform:translateY(-100px) scale(0.9); }
+      0%   { opacity:0; transform:translate(-50%, -50%) scale(0.6); }
+      15%  { opacity:1; transform:translate(-50%, -60%) scale(1.25); }
+      40%  { opacity:1; transform:translate(-50%, -110%) scale(1.05); }
+      100% { opacity:0; transform:translate(-50%, -200%) scale(0.9); }
     }
 
     /* ── NEXT BUTTON ── */
@@ -274,12 +276,68 @@
     .rb-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-top: 2px; }
     .result-actions { display: flex; flex-direction: column; gap: 10px; }
 
+    /* ── DETAILED STATS CARD ── */
+    .stats-card {
+      background: var(--card); border: 1.5px solid var(--border); border-radius: 24px;
+      padding: 24px; margin-bottom: 24px; position: relative; overflow: hidden;
+    }
+    .stats-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px; font-size: 13px; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted);
+    }
+    .stats-lock-badge {
+      font-size: 10px; padding: 4px 10px; border-radius: 50px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted);
+    }
+    .stats-grid { display: flex; flex-direction: column; gap: 2px; }
+    .stat-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px; border-radius: 10px; transition: background 0.15s;
+    }
+    .stat-row:nth-child(odd) { background: rgba(255,255,255,0.02); }
+    .stat-name { font-size: 14px; color: var(--text); font-weight: 500; }
+    .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--gold); }
+
+    /* Lock overlay (signed-out) */
+    .stats-lock-overlay {
+      position: absolute; inset: 0;
+      background: rgba(10,10,15,0.82);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px; text-align: center;
+    }
+    .stats-lock-overlay.hidden { display: none; }
+    .lock-overlay-inner { display: flex; flex-direction: column; align-items: center; gap: 10px; max-width: 320px; }
+    .lock-big { font-size: 40px; margin-bottom: 4px; }
+    .lock-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--text); }
+    .lock-sub { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 8px; }
+    .lock-login-link { font-size: 12px; color: var(--muted); text-decoration: none; margin-top: 2px; }
+    .lock-login-link:hover { color: var(--accent); }
+
+    /* ── LEADERBOARD BUTTON ── */
+    .leaderboard-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: 16px 20px; margin-top: 12px;
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px;
+      text-decoration: none; color: var(--text); transition: all 0.2s ease;
+    }
+    .leaderboard-btn:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,214,10,0.15); }
+    .lb-left { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; }
+    .lb-icon { font-size: 20px; }
+    .lb-tag {
+      font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+      padding: 4px 10px; border-radius: 50px;
+      background: rgba(255,214,10,0.1); border: 1px solid rgba(255,214,10,0.3); color: var(--gold);
+    }
+
     /* ── TOAST ── */
     .notif {
-      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+      position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-80px);
       background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
       padding: 12px 20px; font-size: 14px; font-weight: 500;
-      transition: transform 0.3s ease; z-index: 100; white-space: nowrap;
+      transition: transform 0.3s ease; z-index: 1100; white-space: nowrap;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.4);
     }
     .notif.show { transform: translateX(-50%) translateY(0); }
     .notif.correct-notif { border-color: var(--success); color: var(--success); }
@@ -402,6 +460,40 @@
         <div class="rb-item"><div class="rb-val gold"  id="rb-avg">—</div><div class="rb-label">Avg Speed</div></div>
       </div>
     </div>
+
+    <!-- Detailed stats — locked unless signed in -->
+    <div class="stats-card" id="stats-card">
+      <div class="stats-header">
+        <span>Detailed Stats</span>
+        <span class="stats-lock-badge" id="stats-lock-badge">🔒 Members only</span>
+      </div>
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-row"><span class="stat-name">⚡ Fastest answer</span><span class="stat-value" id="st-fastest">—</span></div>
+        <div class="stat-row"><span class="stat-name">🐢 Slowest answer</span><span class="stat-value" id="st-slowest">—</span></div>
+        <div class="stat-row"><span class="stat-name">↺ Replays used</span><span class="stat-value" id="st-replays">—</span></div>
+        <div class="stat-row"><span class="stat-name">🎯 Best single answer</span><span class="stat-value" id="st-bestpts">—</span></div>
+        <div class="stat-row"><span class="stat-name">🔥 Longest streak</span><span class="stat-value" id="st-streak">—</span></div>
+        <div class="stat-row"><span class="stat-name">⏱ Total time played</span><span class="stat-value" id="st-totaltime">—</span></div>
+      </div>
+
+      <!-- Leaderboard button (sits under the blur, unlocked on signup) -->
+      <a href="leaderboard.html" class="leaderboard-btn">
+        <span class="lb-left"><span class="lb-icon">🏆</span> View Leaderboards</span>
+        <span class="lb-tag">Coming Soon</span>
+      </a>
+
+      <!-- Lock overlay for signed-out users -->
+      <div class="stats-lock-overlay" id="stats-lock-overlay">
+        <div class="lock-overlay-inner">
+          <div class="lock-big">🔒</div>
+          <div class="lock-title">Unlock your full stats</div>
+          <div class="lock-sub">Sign up to see detailed breakdowns, save your records, and climb the leaderboards.</div>
+          <a href="signup.html" class="btn btn-primary" style="max-width:240px">✦ &nbsp;Sign Up Free</a>
+          <a href="login.html" class="lock-login-link">Already have an account? Log in</a>
+        </div>
+      </div>
+    </div>
+
     <div class="result-actions">
       <button class="btn btn-primary" onclick="startGame()">▶ &nbsp;Play Again</button>
       <button class="btn btn-ghost" onclick="goHome()" style="width:100%">Change Settings</button>
@@ -456,6 +548,13 @@ let questions    = [];
 let currentQ     = 0;
 let score = 0; let correctCount = 0; let wrongCount = 0;
 let bestBonus = 0; let totalSpeedMs = 0; let speedAnswers = 0;
+/* Stage 1 stat tracking */
+let totalReplays = 0;       // replays across whole game
+let fastestMs = null;       // fastest single answer
+let slowestMs = null;       // slowest single answer
+let currentStreak = 0;      // current correct streak
+let longestStreak = 0;      // best streak this game
+let gameStartTime = null;   // when the round began
 let audio = null; let clipTimerInt = null; let speedTimerInt = null;
 let answered = false; let answerStart = null; let replayCount = 0; let previewUrl = '';
 
@@ -567,6 +666,8 @@ function startGame() {
 
   currentQ = 0; score = 0; correctCount = 0; wrongCount = 0;
   bestBonus = 0; totalSpeedMs = 0; speedAnswers = 0;
+  totalReplays = 0; fastestMs = null; slowestMs = null;
+  currentStreak = 0; longestStreak = 0; gameStartTime = Date.now();
 
   // Find label for badge
   const packDef = DECADES.find(p => p.id === selectedPack);
@@ -676,6 +777,7 @@ function manualPlay(url, dur) {
 function replayClip() {
   if (answered) return;
   replayCount++;
+  totalReplays++;
   document.getElementById('replay-penalty-tag').textContent = `-${replayCount * REPLAY_PENALTY} pts`;
   showNotif(`↺ Replay penalty: -${REPLAY_PENALTY} pts`, 'penalty-notif');
   const dur = DIFF[selectedDiff].clipSecs;
@@ -768,17 +870,27 @@ function submitAnswer(btn, chosen, correct) {
     pts = Math.max(0, pts - replayCount * REPLAY_PENALTY);
     score += pts; correctCount++;
     if (pts > bestBonus) bestBonus = pts;
+    // streak tracking
+    currentStreak++;
+    if (currentStreak > longestStreak) longestStreak = currentStreak;
     document.getElementById('score-display').textContent = score.toLocaleString();
     document.getElementById('best-bonus').textContent    = `+${bestBonus.toLocaleString()}`;
     showNotif(`✓ Correct! +${pts.toLocaleString()} pts`, 'correct-notif');
     if (pts > 0) firePopup(btn, pts);
   } else {
     btn.classList.add('wrong'); wrongCount++;
+    currentStreak = 0; // streak broken
     document.querySelectorAll('.choice-btn').forEach(b => { if (b.dataset.choice === correct) b.classList.add('correct'); });
     showNotif('✗ Wrong answer', 'wrong-notif');
   }
 
-  if (answerStart) { totalSpeedMs += Date.now() - answerStart; speedAnswers++; }
+  if (answerStart) {
+    const elapsed = Date.now() - answerStart;
+    totalSpeedMs += elapsed; speedAnswers++;
+    // track fastest/slowest answer
+    if (fastestMs === null || elapsed < fastestMs) fastestMs = elapsed;
+    if (slowestMs === null || elapsed > slowestMs) slowestMs = elapsed;
+  }
   const nb = document.getElementById('next-btn');
   nb.textContent = currentQ === questions.length - 1 ? 'See Results →' : 'Next Question →';
   nb.classList.add('visible');
@@ -793,12 +905,33 @@ function calcPoints() {
   return Math.round(max * fraction);
 }
 
+/* Quiet single ding on correct answer (Web Audio — no file) */
+let _audioCtx = null;
+function playDing() {
+  try {
+    if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = _audioCtx;
+    const now = ctx.currentTime;
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 1568.0; // single bright G6 note
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.09, now + 0.01); // quiet
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  } catch (e) { /* audio unsupported — silent */ }
+}
+
 function firePopup(btn, pts) {
   const el = document.getElementById('pts-popup');
   const rect = btn.getBoundingClientRect();
   el.textContent = `+${pts.toLocaleString()}`;
-  el.style.left  = (rect.left + rect.width / 2 - 40) + 'px';
-  el.style.top   = (rect.top + window.scrollY - 10) + 'px';
+  // position:fixed is relative to viewport, so DON'T add scrollY
+  el.style.left = (rect.left + rect.width / 2) + 'px';
+  el.style.top  = (rect.top + rect.height / 2) + 'px';
   el.className = 'pts-popup'; void el.offsetWidth; el.className = 'pts-popup fire';
 }
 
@@ -818,6 +951,31 @@ function showResult() {
   document.getElementById('rb-wrong').textContent    = wrongCount;
   document.getElementById('rb-acc').textContent      = acc + '%';
   document.getElementById('rb-avg').textContent      = avgSec;
+
+  // ── Detailed stats ──
+  document.getElementById('st-fastest').textContent  = fastestMs !== null ? (fastestMs/1000).toFixed(1) + 's' : '—';
+  document.getElementById('st-slowest').textContent  = slowestMs !== null ? (slowestMs/1000).toFixed(1) + 's' : '—';
+  document.getElementById('st-replays').textContent  = totalReplays;
+  document.getElementById('st-bestpts').textContent  = bestBonus ? bestBonus.toLocaleString() : '0';
+  document.getElementById('st-streak').textContent   = longestStreak;
+  const totalSec = gameStartTime ? Math.round((Date.now() - gameStartTime) / 1000) : 0;
+  const mins = Math.floor(totalSec / 60), secs = totalSec % 60;
+  document.getElementById('st-totaltime').textContent = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+
+  // ── Lock state ──
+  // Stage 1: always locked (no auth yet). When auth is built, replace
+  // `isLoggedIn` with the real check and the overlay hides automatically.
+  const isLoggedIn = false;
+  const overlay   = document.getElementById('stats-lock-overlay');
+  const lockBadge = document.getElementById('stats-lock-badge');
+  if (isLoggedIn) {
+    overlay.classList.add('hidden');
+    lockBadge.style.display = 'none';
+  } else {
+    overlay.classList.remove('hidden');
+    lockBadge.style.display = '';
+  }
+
   const [emoji, title] =
     acc === 100 ? ['🏆','PERFECT!']   :
     acc >= 80   ? ['🔥','On Fire!']   :
