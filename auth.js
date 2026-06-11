@@ -12,7 +12,13 @@ const SUPABASE_URL = 'https://mwvmojatfnmubrtumoge.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13dm1vamF0Zm5tdWJydHVtb2dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDI4MzEsImV4cCI6MjA5Njc3ODgzMX0.N5lsraeT_0f6uVn7KG6jVivnPmWCigE8667nZRJnxhw';
 
 // Create the client (supabase-js must be loaded before this file)
-const ecSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const ecSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: {
+    persistSession: true,        // keep the login saved across page loads
+    autoRefreshToken: true,      // refresh expired tokens automatically
+    storage: window.localStorage // store the session in the browser
+  }
+});
 
 /* ── AUTH FUNCTIONS ─────────────────────────────────────────── */
 
@@ -65,10 +71,10 @@ async function ecLogOut() {
   await ecSupabase.auth.signOut();
 }
 
-// Get current logged-in user (or null)
+// Get current logged-in user (or null) — uses session (reliable, instant)
 async function ecCurrentUser() {
-  const { data } = await ecSupabase.auth.getUser();
-  return data ? data.user : null;
+  const { data } = await ecSupabase.auth.getSession();
+  return (data && data.session) ? data.session.user : null;
 }
 
 // Get the current user's username (or null)
