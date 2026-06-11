@@ -77,6 +77,13 @@ async function ecEnsureProfile() {
     .then(() => {}, () => {});
 }
 
+// Resend the confirmation email
+async function ecResendConfirmation(email) {
+  const { error } = await ecSupabase.auth.resend({ type: 'signup', email });
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
 // Quick boolean check
 async function ecIsLoggedIn() {
   const user = await ecCurrentUser();
