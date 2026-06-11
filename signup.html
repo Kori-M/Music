@@ -48,6 +48,14 @@
     }
     .btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,45,85,0.35); }
     .btn-primary:disabled { opacity:0.5; cursor:not-allowed; }
+    .btn-resend {
+      width:100%; background:transparent; color:var(--muted);
+      border:1.5px solid var(--border); border-radius:50px; padding:13px;
+      font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600;
+      cursor:pointer; transition:all 0.2s ease; margin-top:10px;
+    }
+    .btn-resend:hover:not(:disabled) { border-color:var(--accent); color:var(--accent); }
+    .btn-resend:disabled { opacity:0.45; cursor:not-allowed; }
     .msg { font-size:13px; padding:12px 14px; border-radius:10px; margin-bottom:16px; display:none; }
     .msg.show { display:block; }
     .msg.error { background:rgba(255,69,58,0.1); border:1px solid rgba(255,69,58,0.3); color:var(--danger); }
@@ -86,6 +94,10 @@
 
       <button class="btn-primary" id="signup-btn" onclick="doSignup()">Sign Up</button>
 
+      <button class="btn-resend" id="resend-btn" onclick="doResend()" style="display:none">
+        Resend confirmation email
+      </button>
+
       <div class="switch">Already have an account? <a href="login.html">Log in</a></div>
     </div>
     <div class="back"><a href="index.html">← Back to Ear Candy</a></div>
@@ -98,6 +110,43 @@
       const m = document.getElementById('msg');
       m.textContent = text;
       m.className = `msg show ${type}`;
+    }
+
+    let lastEmail = '';
+    let resendTimer = null;
+
+    // Start a 30s cooldown on the resend button
+    function startResendCooldown() {
+      const btn = document.getElementById('resend-btn');
+      btn.style.display = 'block';
+      let secs = 30;
+      btn.disabled = true;
+      btn.textContent = `Resend available in ${secs}s`;
+      clearInterval(resendTimer);
+      resendTimer = setInterval(() => {
+        secs--;
+        if (secs <= 0) {
+          clearInterval(resendTimer);
+          btn.disabled = false;
+          btn.textContent = 'Resend confirmation email';
+        } else {
+          btn.textContent = `Resend available in ${secs}s`;
+        }
+      }, 1000);
+    }
+
+    async function doResend() {
+      if (!lastEmail) return;
+      const btn = document.getElementById('resend-btn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      const res = await ecResendConfirmation(lastEmail);
+      if (res.ok) {
+        showMsg('Confirmation email resent — check your inbox (and spam).', 'success');
+      } else {
+        showMsg(res.error || 'Could not resend right now. Wait a moment and try again.', 'error');
+      }
+      startResendCooldown(); // restart the 30s timer
     }
 
     async function doSignup() {
@@ -125,8 +174,10 @@
       }
 
       if (res.needsConfirmation) {
+        lastEmail = email;
         showMsg('Almost there! Check your email and click the confirmation link, then log in.', 'success');
         btn.textContent = 'Check your email ✓';
+        startResendCooldown(); // show resend button with 30s cooldown
       } else {
         showMsg('Account created! Redirecting…', 'success');
         setTimeout(() => window.location.href = 'index.html', 1200);
