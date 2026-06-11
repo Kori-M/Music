@@ -876,7 +876,6 @@ function submitAnswer(btn, chosen, correct) {
     document.getElementById('score-display').textContent = score.toLocaleString();
     document.getElementById('best-bonus').textContent    = `+${bestBonus.toLocaleString()}`;
     showNotif(`✓ Correct! +${pts.toLocaleString()} pts`, 'correct-notif');
-    playDing();
     if (pts > 0) firePopup(btn, pts);
   } else {
     btn.classList.add('wrong'); wrongCount++;
