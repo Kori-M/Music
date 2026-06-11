@@ -219,8 +219,10 @@
         btn.textContent = 'Check your email ✓';
         startResendCooldown(); // show resend button with 30s cooldown
       } else {
-        showMsg('Account created! Redirecting…', 'success');
-        setTimeout(() => window.location.href = 'index.html', 1200);
+        // Confirmation off → already logged in. Redirect straight in.
+        showMsg('Account created! Logging you in…', 'success');
+        btn.textContent = 'Welcome! ✓';
+        setTimeout(() => window.location.href = 'index.html', 1000);
       }
     }
 
