@@ -95,6 +95,15 @@ async function ecResendConfirmation(email) {
   return { ok: true };
 }
 
+// Send a password reset email
+async function ecSendPasswordReset(email) {
+  const { error } = await ecSupabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://kori-m.github.io/Music/reset-password.html'
+  });
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
 // Quick boolean check
 async function ecIsLoggedIn() {
   const user = await ecCurrentUser();
