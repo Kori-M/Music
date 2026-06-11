@@ -413,29 +413,36 @@
 <div class="notif" id="notif"></div>
 
 <script src="2020.js"></script>
-<script>const s2020 = typeof songs !== 'undefined' && songs ? [...songs] : []; var songs = undefined;</script>
+<script>window.s2020 = (typeof songs !== 'undefined' && songs) ? songs.slice() : [];</script>
+<script>songs = undefined;</script>
 <script src="2010.js"></script>
-<script>const s2010 = typeof songs !== 'undefined' && songs ? [...songs] : []; var songs = undefined;</script>
+<script>window.s2010 = (typeof songs !== 'undefined' && songs) ? songs.slice() : [];</script>
+<script>songs = undefined;</script>
 <script src="2000.js"></script>
-<script>const s2000 = typeof songs !== 'undefined' && songs ? [...songs] : []; var songs = undefined;</script>
+<script>window.s2000 = (typeof songs !== 'undefined' && songs) ? songs.slice() : [];</script>
+<script>songs = undefined;</script>
 <script src="1990.js"></script>
-<script>const s1990 = typeof songs !== 'undefined' && songs ? [...songs] : []; var songs = undefined;</script>
+<script>window.s1990 = (typeof songs !== 'undefined' && songs) ? songs.slice() : [];</script>
+<script>songs = undefined;</script>
 <script src="1980.js"></script>
-<script>const s1980 = typeof songs !== 'undefined' && songs ? [...songs] : []; var songs = undefined;</script>
+<script>window.s1980 = (typeof songs !== 'undefined' && songs) ? songs.slice() : [];</script>
+<script>songs = undefined;</script>
 <script src="1970.js"></script>
-<script>const s1970 = typeof songs !== 'undefined' && songs ? [...songs] : []; var songs = undefined;</script>
+<script>window.s1970 = (typeof songs !== 'undefined' && songs) ? songs.slice() : [];</script>
+<script>songs = undefined;</script>
 <script src="1960.js"></script>
-<script>const s1960 = typeof songs !== 'undefined' && songs ? [...songs] : []; var songs = undefined;</script>
+<script>window.s1960 = (typeof songs !== 'undefined' && songs) ? songs.slice() : [];</script>
+<script>songs = undefined;</script>
 
 <script>
 const DECADES = [
-  { id: '2020s', label: '2020s', sub: '2020 – now',  emoji: '🔥', rawSongs: s2020 },
-  { id: '2010s', label: '2010s', sub: '2010 – 2019', emoji: '📱', rawSongs: s2010 },
-  { id: '2000s', label: '2000s', sub: '2000 – 2009', emoji: '💿', rawSongs: s2000 },
-  { id: '90s',   label: '90s',   sub: '1990 – 1999', emoji: '📼', rawSongs: s1990 },
-  { id: '80s',   label: '80s',   sub: '1980 – 1989', emoji: '🕹️', rawSongs: s1980 },
-  { id: '70s',   label: '70s',   sub: '1970 – 1979', emoji: '🎸', rawSongs: s1970 },
-  { id: '60s',   label: '60s',   sub: '1960 – 1969', emoji: '🌸', rawSongs: s1960 },
+  { id: '2020s', label: '2020s', sub: '2020 – now',  emoji: '🔥', rawSongs: window.s2020 || [] },
+  { id: '2010s', label: '2010s', sub: '2010 – 2019', emoji: '📱', rawSongs: window.s2010 || [] },
+  { id: '2000s', label: '2000s', sub: '2000 – 2009', emoji: '💿', rawSongs: window.s2000 || [] },
+  { id: '90s',   label: '90s',   sub: '1990 – 1999', emoji: '📼', rawSongs: window.s1990 || [] },
+  { id: '80s',   label: '80s',   sub: '1980 – 1989', emoji: '🕹️', rawSongs: window.s1980 || [] },
+  { id: '70s',   label: '70s',   sub: '1970 – 1979', emoji: '🎸', rawSongs: window.s1970 || [] },
+  { id: '60s',   label: '60s',   sub: '1960 – 1969', emoji: '🌸', rawSongs: window.s1960 || [] },
 ];
 
 /* ─────────────────────────────────────────────────────────────
