@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up — Ear Candy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0a0a0f; --surface:#111118; --card:#16161f; --border:#2a2a3a;
+      --accent:#ff2d55; --accent2:#ff6b35; --text:#f0f0f8; --muted:#6b6b85;
+      --success:#30d158; --danger:#ff453a;
+    }
+    body {
+      background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif;
+      min-height:100vh; display:flex; align-items:center; justify-content:center; padding:40px 20px;
+    }
+    body::before {
+      content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 20%, rgba(255,45,85,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(255,107,53,0.06) 0%, transparent 60%);
+    }
+    .auth-wrap { position:relative; z-index:1; width:100%; max-width:400px; }
+    .logo {
+      font-family:'Bebas Neue',sans-serif; font-size:64px; letter-spacing:0.04em;
+      line-height:0.9; text-align:center; margin-bottom:6px;
+      background:linear-gradient(135deg,#fff 0%,var(--accent) 50%,var(--accent2) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .sub { text-align:center; font-size:13px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:36px; }
+    .card { background:var(--card); border:1.5px solid var(--border); border-radius:24px; padding:32px; }
+    .card-title { font-family:'Bebas Neue',sans-serif; font-size:32px; margin-bottom:4px; }
+    .card-desc { font-size:13px; color:var(--muted); margin-bottom:24px; }
+    .field { margin-bottom:16px; }
+    .field label { display:block; font-size:12px; font-weight:600; color:var(--muted); margin-bottom:6px; letter-spacing:0.03em; }
+    .field input {
+      width:100%; background:var(--surface); border:1.5px solid var(--border); border-radius:12px;
+      padding:13px 16px; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text); transition:border-color 0.2s;
+    }
+    .field input:focus { outline:none; border-color:var(--accent); }
+    .field input::placeholder { color:#44445a; }
+    .btn-primary {
+      width:100%; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff;
+      border:none; border-radius:50px; padding:15px; font-family:'DM Sans',sans-serif;
+      font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s ease; margin-top:8px;
+    }
+    .btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,45,85,0.35); }
+    .btn-primary:disabled { opacity:0.5; cursor:not-allowed; }
+    .msg { font-size:13px; padding:12px 14px; border-radius:10px; margin-bottom:16px; display:none; }
+    .msg.show { display:block; }
+    .msg.error { background:rgba(255,69,58,0.1); border:1px solid rgba(255,69,58,0.3); color:var(--danger); }
+    .msg.success { background:rgba(48,209,88,0.1); border:1px solid rgba(48,209,88,0.3); color:var(--success); }
+    .switch { text-align:center; font-size:13px; color:var(--muted); margin-top:20px; }
+    .switch a { color:var(--accent); text-decoration:none; font-weight:600; }
+    .switch a:hover { text-decoration:underline; }
+    .back { text-align:center; margin-top:16px; }
+    .back a { font-size:12px; color:var(--muted); text-decoration:none; }
+    .back a:hover { color:var(--text); }
+  </style>
+</head>
+<body>
+  <div class="auth-wrap">
+    <div class="logo">Ear Candy</div>
+    <div class="sub">Music games</div>
+
+    <div class="card">
+      <div class="card-title">Create Account</div>
+      <div class="card-desc">Sign up to save your stats and climb the leaderboards.</div>
+
+      <div class="msg" id="msg"></div>
+
+      <div class="field">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="How you'll show on leaderboards" autocomplete="username" maxlength="20" />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="At least 6 characters" autocomplete="new-password" />
+      </div>
+
+      <button class="btn-primary" id="signup-btn" onclick="doSignup()">Sign Up</button>
+
+      <div class="switch">Already have an account? <a href="login.html">Log in</a></div>
+    </div>
+    <div class="back"><a href="index.html">← Back to Ear Candy</a></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script>
+    function showMsg(text, type) {
+      const m = document.getElementById('msg');
+      m.textContent = text;
+      m.className = `msg show ${type}`;
+    }
+
+    async function doSignup() {
+      const username = document.getElementById('username').value.trim();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn      = document.getElementById('signup-btn');
+
+      // Basic validation
+      if (!username) return showMsg('Please choose a username.', 'error');
+      if (username.length < 3) return showMsg('Username must be at least 3 characters.', 'error');
+      if (!email) return showMsg('Please enter your email.', 'error');
+      if (password.length < 6) return showMsg('Password must be at least 6 characters.', 'error');
+
+      btn.disabled = true;
+      btn.textContent = 'Creating account…';
+
+      const res = await ecSignUp(email, password, username);
+
+      if (!res.ok) {
+        showMsg(res.error || 'Something went wrong. Try again.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Sign Up';
+        return;
+      }
+
+      if (res.needsConfirmation) {
+        showMsg('Almost there! Check your email and click the confirmation link, then log in.', 'success');
+        btn.textContent = 'Check your email ✓';
+      } else {
+        showMsg('Account created! Redirecting…', 'success');
+        setTimeout(() => window.location.href = 'index.html', 1200);
+      }
+    }
+
+    // Allow Enter key to submit
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') doSignup(); });
+  </script>
+</body>
+</html>
