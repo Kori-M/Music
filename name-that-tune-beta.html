@@ -316,8 +316,8 @@
     /* ── LEADERBOARD BUTTON ── */
     .leaderboard-btn {
       display: flex; align-items: center; justify-content: space-between;
-      width: 100%; padding: 16px 20px; margin-bottom: 24px;
-      background: var(--card); border: 1.5px solid var(--border); border-radius: 16px;
+      width: 100%; padding: 16px 20px; margin-top: 12px;
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px;
       text-decoration: none; color: var(--text); transition: all 0.2s ease;
     }
     .leaderboard-btn:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,214,10,0.15); }
@@ -472,6 +472,13 @@
         <div class="stat-row"><span class="stat-name">🔥 Longest streak</span><span class="stat-value" id="st-streak">—</span></div>
         <div class="stat-row"><span class="stat-name">⏱ Total time played</span><span class="stat-value" id="st-totaltime">—</span></div>
       </div>
+
+      <!-- Leaderboard button (sits under the blur, unlocked on signup) -->
+      <a href="leaderboard.html" class="leaderboard-btn">
+        <span class="lb-left"><span class="lb-icon">🏆</span> View Leaderboards</span>
+        <span class="lb-tag">Coming Soon</span>
+      </a>
+
       <!-- Lock overlay for signed-out users -->
       <div class="stats-lock-overlay" id="stats-lock-overlay">
         <div class="lock-overlay-inner">
@@ -483,12 +490,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Leaderboard button -->
-    <a href="leaderboard.html" class="leaderboard-btn">
-      <span class="lb-left"><span class="lb-icon">🏆</span> View Leaderboards</span>
-      <span class="lb-tag">Coming Soon</span>
-    </a>
 
     <div class="result-actions">
       <button class="btn btn-primary" onclick="startGame()">▶ &nbsp;Play Again</button>
